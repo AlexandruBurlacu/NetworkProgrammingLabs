@@ -1,8 +1,8 @@
 # Network Programming Labs
 
 [![Ebert](https://ebertapp.io/github/AlexandruBurlacu/NetworkProgrammingLabs.svg)](https://ebertapp.io/github/AlexandruBurlacu/NetworkProgrammingLabs)
-<!-- [![Build Status](https://travis-ci.org/AlexandruBurlacu/elixir_docker.png?branch=master)](https://travis-ci.org/AlexandruBurlacu/elixir_docker)
-[![Coverage Status](https://coveralls.io/repos/github/AlexandruBurlacu/elixir_docker/badge.svg?branch=master)](https://coveralls.io/github/AlexandruBurlacu/elixir_docker?branch=master) -->
+<!-- [![Build Status](https://travis-ci.org/AlexandruBurlacu/NetworkProgrammingLabs.png?branch=master)](https://travis-ci.org/AlexandruBurlacu/NetworkProgrammingLabs)
+[![Coverage Status](https://coveralls.io/repos/github/AlexandruBurlacu/NetworkProgrammingLabs/badge.svg?branch=master)](https://coveralls.io/github/AlexandruBurlacu/NetworkProgrammingLabs?branch=master) -->
 
 This repository contains Elixir code used for the Network Programming laboratory works at Technical University of Moldova.
 
