@@ -4,3 +4,5 @@
 erl_crash.dump
 *.ez
 *.beam
+# I use vscode so this one too
+.vscode
