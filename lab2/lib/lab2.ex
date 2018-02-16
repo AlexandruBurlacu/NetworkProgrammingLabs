@@ -13,20 +13,21 @@ defmodule Lab2 do
 
   """
   def hello do
-    service_root = "https://desolate-ravine-43301.herokuapp.com/"
+    service_root = "https://desolate-ravine-43301.herokuapp.com"
     {status, urls} =
     HTTPotion.post(service_root)
     |> (fn x -> Poison.decode x.body end).()
 
-    if status == :ok do
-      IO.inspect urls
-    end
     bodies =
-    Task.async_stream(urls, fn {} -> {
-      HTTPotion.get(x).body
+    Task.async_stream(urls, fn x -> {
+      case x["method"] do
+        "GET" -> HTTPotion.get("#{service_root}#{x["path"]}").body
+        "POST" -> HTTPotion.post("#{service_root}#{x["path"]}").body
+        _ -> "It's complicated"
+      end
     } end)
     |> Enum.to_list
     
-    # bodies
+    bodies
   end
 end
