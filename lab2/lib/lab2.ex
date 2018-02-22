@@ -14,18 +14,21 @@ defmodule Lab2 do
   """
   def hello do
     service_root = "https://desolate-ravine-43301.herokuapp.com"
-    {status, urls} =
-    HTTPotion.post(service_root)
-    |> (fn x -> Poison.decode x.body end).()
+    resp = HTTPotion.post(service_root)
+    {urls, key} = resp
+    |> (fn x -> {Poison.decode!(x.body), x.headers["session"]} end).()
+
+    IO.inspect {urls, key}
 
     bodies =
     Task.async_stream(urls, fn x -> {
       case x["method"] do
-        "GET" -> HTTPotion.get("#{service_root}#{x["path"]}").body
-        "POST" -> HTTPotion.post("#{service_root}#{x["path"]}").body
+        "GET" -> HTTPotion.get("#{service_root}#{x["path"]}", headers: ["session": key])
         _ -> "It's complicated"
       end
     } end)
+    |> IO.inspect
+    # |> Enum.map((fn x -> x.body end).())
     |> Enum.to_list
     
     bodies
