@@ -17,12 +17,16 @@ defmodule Lab2 do
     resp = HTTPotion.post(service_root)
     {urls, key} = {Poison.decode!(resp.body), resp.headers["session"]}
 
-    tasks = Enum.map(urls, fn url -> 
-      Task.async(fn -> HTTPotion.get("#{service_root}#{url["path"]}",
-                 headers: ["session": key]) end)
-    end)
-    :timer.sleep(29990)
-    bodies = Enum.map(tasks, &Task.await(&1))
+    # tasks = Enum.map(urls, fn url -> 
+    #   Task.async(fn -> HTTPotion.get("#{service_root}#{url["path"]}",
+    #              headers: ["session": key]) end)
+    # end)
+    # :timer.sleep(29990)
+    # bodies = Enum.map(tasks, &Task.await(&1))
+
+    bodies = Task.async_stream(urls, fn url -> HTTPotion.get("#{service_root}#{url["path"]}",
+                                     headers: ["session": key]) end, timeout: 50000)
+    |> Enum.to_list
 
     bodies
   end
