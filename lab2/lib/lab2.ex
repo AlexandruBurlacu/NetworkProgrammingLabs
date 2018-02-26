@@ -18,17 +18,18 @@ defmodule Lab2 do
     {urls, key} = resp
     |> (fn x -> {Poison.decode!(x.body), x.headers["session"]} end).()
 
-    IO.inspect {urls, key}
-
     bodies =
-    Task.async_stream(urls, fn x -> {
-      case x["method"] do
-        "GET" -> HTTPotion.get("#{service_root}#{x["path"]}", headers: ["session": key])
-        _ -> "It's complicated"
-      end
+    # Task.async_stream(urls, fn x -> {
+    #     HTTPotion.get("#{service_root}#{x["path"]}", headers: ["session": key])
+    # } end, timeout: 15000)
+    # # |> IO.inspect
+    # # |> Enum.map((fn x -> x.body end).())
+    # |> Enum.to_list
+
+    Enum.map(urls, fn (x) -> {
+      Task.async(HTTPotion.get("#{service_root}#{x["path"]}", headers: ["session": key]))
     } end)
-    |> IO.inspect
-    # |> Enum.map((fn x -> x.body end).())
+    |> Enum.map((fn x -> Task.await(x, timeout: 30000) end).())
     |> Enum.to_list
     
     bodies
