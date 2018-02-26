@@ -15,23 +15,16 @@ defmodule Lab2 do
   def hello do
     service_root = "https://desolate-ravine-43301.herokuapp.com"
     resp = HTTPotion.post(service_root)
-    {urls, key} = resp
-    |> (fn x -> {Poison.decode!(x.body), x.headers["session"]} end).()
+    {urls, key} = {Poison.decode!(resp.body), resp.headers["session"]}
 
-    bodies =
-    # Task.async_stream(urls, fn x -> {
-    #     HTTPotion.get("#{service_root}#{x["path"]}", headers: ["session": key])
-    # } end, timeout: 15000)
-    # # |> IO.inspect
-    # # |> Enum.map((fn x -> x.body end).())
-    # |> Enum.to_list
+    tasks = Enum.map(urls, fn url -> 
+      Task.async(fn -> HTTPotion.get("#{service_root}#{url["path"]}",
+                 headers: ["session": key]) end)
+    end)
+    :timer.sleep(29990)
+    bodies = Enum.map(tasks, &Task.await(&1))
 
-    Enum.map(urls, fn (x) -> {
-      Task.async(HTTPotion.get("#{service_root}#{x["path"]}", headers: ["session": key]))
-    } end)
-    |> Enum.map((fn x -> Task.await(x, timeout: 30000) end).())
-    |> Enum.to_list
-    
     bodies
   end
+
 end
