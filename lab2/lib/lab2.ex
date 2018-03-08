@@ -14,27 +14,35 @@ defmodule Lab2 do
         {Poison.decode!(resp.body), resp.headers["session"]}
     end
 
+    defp get_body_and_conttype(resp) do
+        {resp.headers.hdrs["content-type"], resp.body}
+    end
+
     defp parse({cont_t, content}) do
         case cont_t do
-            "text/csv" -> content
-                          |> NimbleCSV.RFC4180.parse_string
-                          |> Enum.map(fn [d_id, s_t, v] -> %{
-                                            "device_id" => d_id,
-                                            "sensor_type" => String.to_integer(s_t),
-                                            "value" => String.to_float(v)
-                                        } end)
-            "Application/json" -> Poison.decode! content
-            "Application/xml" -> (fn -> %{
-                                     "device_id" => content |> SweetXml.xpath(SweetXml.sigil_x"/device/@id") |> to_string,
-                                     "sensor_type" => content  |> SweetXml.xpath(SweetXml.sigil_x"/device/type/text()") |> to_string |> String.to_integer,
-                                     "value" => content |> SweetXml.xpath(SweetXml.sigil_x"/device/value/text()") |> to_string |> String.to_float
-                                 } end).()
+            "text/csv" -> Lab2.Parsers.parse_csv content
+            "Application/json" -> Lab2.Parsers.parse_json content
+            "Application/xml" -> Lab2.Parsers.parse_xml content
             "text/plain; charset=utf-8" -> IO.puts content
         end
     end
 
-    defp get_body_and_conttype(resp) do
-        {resp.headers.hdrs["content-type"], resp.body}
+    defp pretty_print(row) do
+        sensor_type = case row["sensor_type"] do
+            0 -> "Temperature sensor"
+            1 -> "Humidity sensor"
+            2 -> "Motion sensor"
+            3 -> "Alien Presence detector"
+            4 -> "Dark Matter detector"
+            5 -> "Midichlorian analyzer"
+            _ -> "Do we even have it?"
+        end
+        [:red, :bright,
+        "[" <> sensor_type <> "]" <> "\n",
+        :white, :bright,
+        "Device ID: "  <> row["device_id"]
+        <> " with value " <> Float.to_string(row["value"])
+        <> "\n"] |> IO.ANSI.format |> IO.puts
     end
 
     def fetch do
@@ -53,6 +61,9 @@ defmodule Lab2 do
         |> Enum.map(&get_body_and_conttype(&1))
         |> Enum.map(&parse(&1))
         |> List.flatten
+        |> Enum.filter(fn x -> x != :ok end)
+        |> Enum.sort(fn x, y -> x["sensor_type"] < y["sensor_type"] end)
+        |> Enum.each(&pretty_print(&1))
     end
 
 end
