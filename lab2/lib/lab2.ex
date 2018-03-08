@@ -29,21 +29,7 @@ defmodule Lab2 do
         end
     end
 
-    @doc """
-    ## Examples
-
-        iex> Lab2.get_body_and_conttype(%HTTPotion.Response{
-        iex>    body: "<device id='oflpvssiaykbk'><type>5</type><value>0.48594528</value></device>",
-        iex>    headers: %HTTPotion.Headers{
-        iex>    hdrs: %{
-        iex>         "content-type" => "Application/xml",
-        iex>        "date" => "Thu, 08 Mar 2018 09:42:41 GMT",
-        iex>         "server" => "Cowboy",
-        iex> }}})
-        {"Application/xml", "<device id='oflpvssiaykbk'><type>5</type><value>0.48594528</value></device>"}
-
-    """
-    def get_body_and_conttype(resp) do
+    defp get_body_and_conttype(resp) do
         {resp.headers.hdrs["content-type"], resp.body}
     end
 
