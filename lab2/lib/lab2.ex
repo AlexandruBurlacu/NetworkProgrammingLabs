@@ -33,23 +33,12 @@ defmodule Lab2 do
         
         {urls, key} = get_urls_and_key()
 
-        IO.inspect urls
-
-        # data = Task.async(fn -> HTTPotion.get("#{service_root}/ofzvwicmsn",
-        #              headers: ["session": key]) end)
-
-        # Task.await(data, 30001).body
-
-        tasks = Enum.map(urls, fn url -> 
-          Task.async(fn -> HTTPotion.get("#{@service_root}#{url["path"]}",
-                      headers: ["session": key]) end)
+        tasks = Enum.map(urls, fn url ->
+            Task.async(fn ->
+                HTTPotion.get "#{@service_root}#{url["path"]}", [headers: ["session": key], timeout: 50_000]
+            end)
         end)
-        # :timer.sleep(29990)
-        bodies = Enum.map(tasks, &Task.await(&1))
-
-        # bodies = Task.async_stream(urls, fn url -> HTTPotion.get("#{service_root}#{url["path"]}",
-        #                                  headers: ["session": key]) end, timeout: 50000)
-        # |> Enum.to_list
+        bodies = Enum.map(tasks, &Task.await(&1, 50_000))
 
         bodies
     end
