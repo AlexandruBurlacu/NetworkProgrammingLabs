@@ -24,7 +24,11 @@ defmodule Lab2 do
                                             "value" => String.to_float(v)
                                         } end)
             "Application/json" -> Poison.decode! content
-            "Application/xml" -> content
+            "Application/xml" -> (fn -> %{
+                                     "device_id" => content |> SweetXml.xpath(SweetXml.sigil_x"/device/@id") |> to_string,
+                                     "sensor_type" => content  |> SweetXml.xpath(SweetXml.sigil_x"/device/type/text()") |> to_string |> String.to_integer,
+                                     "value" => content |> SweetXml.xpath(SweetXml.sigil_x"/device/value/text()") |> to_string |> String.to_float
+                                 } end).()
             "text/plain; charset=utf-8" -> IO.puts content
         end
     end

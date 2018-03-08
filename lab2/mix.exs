@@ -16,7 +16,7 @@ defmodule Lab2.MixProject do
   # Run "mix help compile.app" to learn about applications.
   def application do
     [
-      extra_applications: [:logger, :httpotion]
+      extra_applications: [:logger, :httpotion, :xmerl]
     ]
   end
 
@@ -28,8 +28,8 @@ defmodule Lab2.MixProject do
       {:excoveralls, github: "parroty/excoveralls", only: :test},
       {:poison, "~> 3.1"},
       {:httpotion, "~> 3.1.0"},
-      {:nimble_csv, "~> 0.3"}
-      # {:xml, "~>"}
+      {:nimble_csv, "~> 0.3"},
+      {:sweet_xml, "~> 0.6.5"}
     ]
   end
 
