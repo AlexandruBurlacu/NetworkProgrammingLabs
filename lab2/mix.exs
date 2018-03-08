@@ -27,7 +27,9 @@ defmodule Lab2.MixProject do
       # {:dep_from_git, git: "https://github.com/elixir-lang/my_dep.git", tag: "0.1.0"},
       {:excoveralls, github: "parroty/excoveralls", only: :test},
       {:poison, "~> 3.1"},
-      {:httpotion, "~> 3.1.0"}
+      {:httpotion, "~> 3.1.0"},
+      {:nimble_csv, "~> 0.3"}
+      # {:xml, "~>"}
     ]
   end
 
