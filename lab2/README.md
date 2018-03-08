@@ -1,21 +1,15 @@
 # Lab2
 
-**TODO: Add description**
-
 ## Installation
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `lab2` to your list of dependencies in `mix.exs`:
-
-```elixir
-def deps do
-  [
-    {:lab2, "~> 0.1.0"}
-  ]
-end
+```bash
+git clone git@github.com:AlexandruBurlacu/NetworkProgrammingLabs.git
+cd NetworkProgrammingLabs/lab2
+mix do deps.get, deps.compile, compile
+# and now you can try and run the project
+iex -S mix
+Erlang/OTP 20 [erts-9.2] [source] [64-bit] [smp:4:4] [ds:4:4:10] [async-threads:10] [kernel-poll:false]
+Interactive Elixir (1.6.1) - press Ctrl+C to exit (type h() ENTER for help)
+iex(1)> Lab2.fetch
+... # you're gonna like it, just be patient
 ```
-
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at [https://hexdocs.pm/lab2](https://hexdocs.pm/lab2).
-
