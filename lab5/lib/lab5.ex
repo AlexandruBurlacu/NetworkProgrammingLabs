@@ -1,4 +1,8 @@
 defmodule Lab5 do
+  # Take a look
+  # https://elixir-lang.org/getting-started/mix-otp/task-and-gen-tcp.html
+  # http://andrealeopardi.com/posts/handling-tcp-connections-in-elixir/
+  # https://parroty00.wordpress.com/2013/07/28/elixir-tcp-server-example/
 
   use GenServer
 
