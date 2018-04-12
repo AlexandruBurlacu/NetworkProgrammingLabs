@@ -34,7 +34,7 @@ defmodule TCPServer do
         {:ok, data} = :gen_tcp.recv(socket, 0)
         {status, log_msg} = arg_handler(data, socket)
         Logger.info log_msg
-        data
+        log_msg
     end
     
     defp write_line(line, socket) do
@@ -43,7 +43,8 @@ defmodule TCPServer do
 
     defp arg_handler(data, socket) do
         case data do
-            "exit\r\n" -> :gen_tcp.close socket
+            "/exit\r\n" -> :gen_tcp.close socket
+            "/hello\r\n" -> {:ok, "Hello World"}
             _ -> {:ok, "Received #{data}"}
         end
     end
