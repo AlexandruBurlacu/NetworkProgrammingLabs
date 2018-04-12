@@ -1,5 +1,5 @@
 defmodule TCPServer do
-    
+
     require Logger
 
     def accept(port) do
@@ -18,7 +18,7 @@ defmodule TCPServer do
     
     defp loop_acceptor(socket) do
         {:ok, client} = :gen_tcp.accept(socket)
-        serve(client)
+        Task.start_link(fn -> serve(client) end)
         loop_acceptor(socket)
     end
     
@@ -32,10 +32,19 @@ defmodule TCPServer do
     
     defp read_line(socket) do
         {:ok, data} = :gen_tcp.recv(socket, 0)
+        {status, log_msg} = arg_handler(data, socket)
+        Logger.info log_msg
         data
     end
     
     defp write_line(line, socket) do
         :gen_tcp.send(socket, line)
+    end
+
+    defp arg_handler(data, socket) do
+        case data do
+            "exit\r\n" -> :gen_tcp.close socket
+            _ -> {:ok, "Received #{data}"}
+        end
     end
 end
