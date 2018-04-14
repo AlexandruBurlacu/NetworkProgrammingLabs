@@ -18,7 +18,7 @@ defmodule Lab5 do
   def start(_type, _args) do
     children = [
       {Task.Supervisor, name: TCPServer.TaskSupervisor},
-      {Task, fn -> TCPServer.accept(4040) end}
+      Supervisor.child_spec({Task, fn -> TCPServer.accept(4040) end}, restart: :permanent)
     ]
 
     opts = [strategy: :one_for_one, name: TCPServer.Supervisor]
