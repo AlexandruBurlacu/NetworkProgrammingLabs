@@ -1,4 +1,4 @@
-defmodule CustomTCPProtocol.Client do
+defmodule Lab5.CustomTCPProtocol.Client do
     @moduledoc """
     Client side of the CustomTCPProtocol library
 
