@@ -27,26 +27,32 @@ defmodule TCPServer do
         socket
         |> read_line()
         |> check_closed()
-        |> write_line(socket)
+        |> drop_status()
+        |> respond(socket)
     
         serve(socket)
     end
 
+    defp drop_status({_status, msg}) do
+        msg
+    end
+
     defp check_closed(line) do
-        case line do
-            "Connection closed" -> exit 0
-            _ -> line
+        {status, _msg} = line
+        case status do
+            :error -> exit 0
+            :ok -> line
         end
     end
     
     defp read_line(socket) do
         {:ok, data} = :gen_tcp.recv(socket, 0)
-        {:ok, log_msg} = arg_handler(data, socket)
+        {status, log_msg} = arg_handler(data, socket)
         Logger.info log_msg
-        log_msg
+        {status, log_msg}
     end
     
-    defp write_line(line, socket) do
+    defp respond(line, socket) do
         :gen_tcp.send(socket, line)
     end
 
@@ -61,7 +67,7 @@ defmodule TCPServer do
     defp arg_handler(data, socket) do
         cond do
             data == "/exit\r\n" -> close_conn(socket)
-            data == "/help\r\n" -> {:ok, "Hello World"}
+            data == "/help\r\n" -> {:ok, "Hello World\n"}
             String.match? data, ~r"/help \w+\r\n" -> {:ok, "Hello World"}
             true -> {:ok, "Received #{data}"}
         end
