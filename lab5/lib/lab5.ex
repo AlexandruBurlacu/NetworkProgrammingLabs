@@ -13,11 +13,11 @@ defmodule Lab5 do
 
   def init(state \\ @initial_state) do
     children = [
-      {Task.Supervisor, name: TCPServer.TaskSupervisor},
-      Supervisor.child_spec({Task, fn -> TCPServer.accept(4040) end}, restart: :permanent)
+      {Task.Supervisor, name: Lab5.CustomTCPProtocol.Server.TaskSupervisor},
+      Supervisor.child_spec({Task, fn -> CustomTCPProtocol.Server.start(4040) end}, restart: :permanent)
     ]
 
-    opts = [strategy: :one_for_one, name: TCPServer.Supervisor]
+    opts = [strategy: :one_for_one, name: CustomTCPProtocol.Server.Supervisor]
     Supervisor.start_link(children, opts)    
   end
 
