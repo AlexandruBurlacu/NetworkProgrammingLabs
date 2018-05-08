@@ -5,6 +5,7 @@ defmodule Lab5.CustomTCPProtocol.Server do
     :func: start
     """
 
+    alias Lab5.CustomTCPProtocol.Logger, as: Logger
     require Logger
 
     @doc """
@@ -21,7 +22,7 @@ defmodule Lab5.CustomTCPProtocol.Server do
         {:ok, socket} = :gen_tcp.listen(port,
         [:binary, packet: :line, active: false, reuseaddr: true])
 
-        if verbose, do: Logger.info "Accepting connections on port #{port}"
+        if verbose, do: Logger.log "Accepting connections on port #{port}"
 
         loop_acceptor(socket)
     end
@@ -58,7 +59,7 @@ defmodule Lab5.CustomTCPProtocol.Server do
     defp get_request(socket) do
         {:ok, data} = :gen_tcp.recv(socket, 0)
         {status, log_msg} = arg_handler(data, socket)
-        Logger.info log_msg
+        Logger.log log_msg
         {status, log_msg}
     end
     
