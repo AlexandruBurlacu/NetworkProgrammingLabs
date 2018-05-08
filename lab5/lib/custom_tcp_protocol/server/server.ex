@@ -28,7 +28,7 @@ defmodule Lab5.CustomTCPProtocol.Server do
 
     defp loop_acceptor(socket) do
         {:ok, client} = :gen_tcp.accept(socket)
-        {:ok, pid} = Task.Supervisor.start_child(TCPServer.TaskSupervisor, fn -> serve(client) end)
+        {:ok, pid} = Task.Supervisor.start_child(Lab5.CustomTCPProtocol.Server.TaskSupervisor, fn -> serve(client) end)
         :ok = :gen_tcp.controlling_process(client, pid)
         loop_acceptor(socket)
     end
@@ -80,8 +80,8 @@ defmodule Lab5.CustomTCPProtocol.Server do
 
     defp arg_handler(data, socket) do
         cond do
-            data == "/exit\r\n" -> help_request_handler(socket)
-            data == "/help\r\n" -> {:ok, "Hello World\n"}
+            data == "/exit\r\n" -> exit_request_handler(socket)
+            data == "/help\r\n" -> help_request_handler
             true -> {:ok, "Received #{data}"}
         end
     end
