@@ -79,11 +79,16 @@ defmodule Lab5.CustomTCPProtocol.Server do
         {:ok, "How can I help you?"}
     end
 
+    defp exec_request_handler(expr) do
+        {:ok, expr}
+    end
+
     defp arg_handler(data, socket) do
-        cond do
-            data == "/exit\r\n" -> exit_request_handler(socket)
-            data == "/help\r\n" -> help_request_handler
-            true -> {:ok, "Received #{data}"}
+        case data do
+            "/exit\r\n" -> exit_request_handler(socket)
+            "/help\r\n" -> help_request_handler()
+            # "/exec " <> expr <> "\r\n" -> exec_request_handler(expr)
+            _ -> {:ok, "Received #{data}"}
         end
     end
 end
