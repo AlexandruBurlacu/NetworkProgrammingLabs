@@ -19,14 +19,14 @@ defmodule Lab5.CustomTCPProtocol.Client do
     end
 
     def exec(socket, msg) do
-        fmsg = "/help " <> msg <> "\r\n"
+        fmsg = "/exec " <> msg <> "\r\n"
         :ok = :gen_tcp.send socket, fmsg
         :gen_tcp.recv socket, 0
     end
 
     def exit(socket) do
         :ok = :gen_tcp.send socket, "/exit"
-        status = :gen_tcp.close socket
+        _ = :gen_tcp.close socket
         {:ok, "Connection closed"}
     end
     

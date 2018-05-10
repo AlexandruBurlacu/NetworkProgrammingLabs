@@ -8,6 +8,8 @@ defmodule Lab5.CustomTCPProtocol.Server do
     alias Lab5.CustomTCPProtocol.Logger, as: Logger
     require Logger
 
+    @regex ~r/([-+]?[0-9]*\.?[0-9]+[\/\+\-\*])+([-+]?[0-9]*\.?[0-9]+)/
+
     @doc """
         The options below mean:
     
@@ -79,16 +81,30 @@ defmodule Lab5.CustomTCPProtocol.Server do
         {:ok, "How can I help you?"}
     end
 
+    defp extract_expr(data) do
+        [head | _] = Regex.run @regex, data
+        head
+    end
+
     defp exec_request_handler(expr) do
-        {:ok, expr}
+        {result, _ctx} = Code.eval_string expr
+        result_str = cond do
+            is_float result -> Float.to_string result
+            is_integer result -> Integer.to_string result
+        end
+        {:ok, result_str}
+    end
+
+    defp complex_condition(data) do
+        data =~ @regex and String.starts_with? data, "/exec"
     end
 
     defp arg_handler(data, socket) do
-        case data do
-            "/exit\r\n" -> exit_request_handler(socket)
-            "/help\r\n" -> help_request_handler()
-            # "/exec " <> expr <> "\r\n" -> exec_request_handler(expr)
-            _ -> {:ok, "Received #{data}"}
+        cond do
+            data == "/exit\r\n" -> exit_request_handler(socket)
+            data == "/help\r\n" -> help_request_handler()
+            complex_condition data -> data |> extract_expr |> exec_request_handler
+            true -> {:ok, "Received #{data}"}
         end
     end
 end
