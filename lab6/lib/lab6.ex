@@ -4,7 +4,7 @@ defmodule Lab6 do
     """
 
     defp send_udp(data) do
-        {:ok, sock} = :gen_udp.open 61616, [:binary]
+        {:ok, sock} = :gen_udp.open 0, []
         :ok = :gen_udp.send(sock, '230.185.192.108', 42424, data)
         :gen_udp.close(sock)
     end
@@ -14,8 +14,8 @@ defmodule Lab6 do
         timestamp = :os.system_time(:milli_seconds)
         data = "#{timestamp}|#{from_uuid}|#{to_uuid}|#{msg}"
                |> :base64.encode
-               |> String.to_charlist
-               |> :erlang.term_to_binary
+            #    |> String.to_charlist
+            #    |> :erlang.term_to_binary
 
         send_udp data
     end
@@ -27,10 +27,8 @@ defmodule Lab6 do
 
         data = "#{timestamp}|#{uuid}|:all|#{msg}"
                |> :base64.encode
-               |> String.to_charlist
-               |> :erlang.term_to_binary
-
-        IO.inspect data
+            #    |> String.to_charlist
+            #    |> :erlang.term_to_binary
 
         send_udp data
 
