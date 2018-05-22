@@ -76,7 +76,7 @@ If you followed all the steps correctly you should have received the message ins
 Our client app has 2 functions, `send_msg` and `create_user`. `send_msg` takes as argument a string that is the message. `create_user` takes also a string, that is the new username and returns a string that is it's UUID.
 Internally the client uses Erlang's `:gen_udp` open and send functions.
 
-## Coments
+## Comments
 
 The use of UDP for IM is not the best choice because this protocol lacks delivery, order and integrity guarantees. IMs do not require maximum throughput, so TCP would do as good, while being much more reliable.
 An use case for UDP would be video or voice chat.
