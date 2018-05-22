@@ -62,12 +62,11 @@ Basically we have the same message structure the only difference is the content 
 
 Now that we understood how this shiet works, let's send a message from our fake created user to a user that uses the application. 
 
-1. Encoding the text message : `{:type :chat, :txt "eheh boi"}` to Base64 : `ezp0eXBlIDpjaGF0LCA6dHh0ICJlaGVoIGJvaSJ9`
+1. Encoding the text message : `{:type :chat, :txt "sup?"}` to Base64 : `ezp0eXBlIDpjaGF0LCA6dHh0ICJlaGVoIGJvaSJ9`
 2. Getting UUID of our fake user : `b1662059-d19d-4943-b4c9-b376b1e4f6be`
 3. Finding a UUID for to who send the message, we will use the UUID of the first user we created : `b0662059-d19d-4943-b4c9-b376b1e4f6be`
 4. Making our message : `1526494592670|b1662059-d19d-4943-b4c9-b376b1e4f6be|b0662059-d19d-4943-b4c9-b376b1e4f6be|ezp0eXBlIDpjaGF0LCA6dHh0ICJlaGVoIGJvaSJ9`
 5. Econding it to Base64 : `YDE1MjY0OTQ1OTI2NzB8YjE2NjIwNTktZDE5ZC00OTQzLWI0YzktYjM3NmIxZTRmNmJlfGIwNjYyMDU5LWQxOWQtNDk0My1iNGM5LWIzNzZiMWU0ZjZiZXxlenAwZVhCbElEcGphR0YwTENBNmRIaDBJQ0psYUdWb0lHSnZhU0o5YA==`
-6. Sending it using Packet Sender.
+6. Sending it using bash.
 
 If you followed all the steps correctly you should have received the message inside the app.
-![ScreenShot](https://i.imgur.com/C6a1SR9.png)

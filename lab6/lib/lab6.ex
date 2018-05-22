@@ -14,8 +14,6 @@ defmodule Lab6 do
         timestamp = :os.system_time(:milli_seconds)
         data = "#{timestamp}|#{from_uuid}|#{to_uuid}|#{msg}"
                |> :base64.encode
-            #    |> String.to_charlist
-            #    |> :erlang.term_to_binary
 
         send_udp data
     end
@@ -27,8 +25,6 @@ defmodule Lab6 do
 
         data = "#{timestamp}|#{uuid}|:all|#{msg}"
                |> :base64.encode
-            #    |> String.to_charlist
-            #    |> :erlang.term_to_binary
 
         send_udp data
 
